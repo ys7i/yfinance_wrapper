@@ -4,6 +4,8 @@ require "pycall/import"
 require "date"
 require "time"
 
+# rubocop:disable Style/HashTransformValues
+
 module YfinanceWrapper
   class Ticker
     def initialize(symbol)
@@ -30,14 +32,7 @@ module YfinanceWrapper
 
     def news
       result = @ticker.news
-      result.map { |v| v.to_h }
-    end
-
-    def basic_info
-      result = @ticker.basic_info
-      result.keys.each_with_object({}) do |key, hash|
-        hash[key] = to_ruby_type(result[key])
-      end
+      result.map(&:to_h)
     end
 
     def calendar
@@ -67,13 +62,14 @@ module YfinanceWrapper
     DF_METHODS = %i[actions balance_sheet capital_gains cash_flow cashflow dividends earnings_dates earnings_estimate
                     earnings_history eps_revisions eps_trend financials growth_estimates income_stmt incomestmt
                     insider_purchases insider_roster_holders insider_transactions institutional_holders major_holders
-                    mutualfund_holders quarterly_balance_sheet quarterly_balancesheet quarterly_cash_flow quarterly_cashflow
-                    quarterly_income_stmt quarterly_income_stmt quarterly_incomestmt recommendations recommendations_summary
-                    splits sustainability ttm_cash_flow ttm_cashflow ttm_financials ttm_income_stmt ttm_incomestmt upgrades_downgrades]
-    DICT_METHODS = %i[analyst_price_targets history_metadata quarterly_financials revenue_estimate]
-    LIST_METHODS = %i[news sec_filings]
+                    mutualfund_holders quarterly_balance_sheet quarterly_balancesheet quarterly_cash_flow
+                    quarterly_cashflow quarterly_income_stmt quarterly_income_stmt quarterly_incomestmt recommendations
+                    recommendations_summary splits sustainability ttm_cash_flow ttm_cashflow ttm_financials
+                    ttm_income_stmt ttm_incomestmt upgrades_downgrades].freeze
+    DICT_METHODS = %i[analyst_price_targets history_metadata quarterly_financials revenue_estimate].freeze
+    LIST_METHODS = %i[news sec_filings].freeze
 
-    UNIMPLEMENTED_METHODS = %i[funds_data quarterly_earnings]
+    UNIMPLEMENTED_METHODS = %i[funds_data quarterly_earnings].freeze
 
     DF_METHODS.each do |method|
       define_method(method) do |*args, **kwargs|
@@ -107,8 +103,9 @@ module YfinanceWrapper
       list.map { |v| dict_to_ruby_type(v) }
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def to_ruby_type(value)
-      return dict_to_ruby_type(value) if value.class.to_s == "<class 'dict'>"
+      return dict_to_ruby_type(value) if value.is_a?(PyCall::Dict)
 
       return df_to_ruby_type(value) if value.respond_to?(:index) && value.respond_to?(:keys)
 
@@ -155,17 +152,17 @@ module YfinanceWrapper
     def dict_to_ruby_type(dict)
       if dict.respond_to?(:to_h)
         hash = dict.to_h
-        hash.each_with_object({}) do |(key, value), hash|
-          hash[key] = to_ruby_type(value)
+        hash.each_with_object({}) do |(key, value), h|
+          h[key] = to_ruby_type(value)
         end
       elsif dict.respond_to?(:each_with_object)
-        dict.each_with_object({}) do |(key, value), hash|
-          hash[key] = to_ruby_type(value)
+        dict.each_with_object({}) do |(key, value), h|
+          h[key] = to_ruby_type(value)
         end
         els
-        dict.keys.each_with_object({}) do |key, hash|
+        dict.keys.each_with_object({}) do |key, h|
           value = dict[key]
-          hash[key] = to_ruby_type(value)
+          h[key] = to_ruby_type(value)
         end
       end
     end
@@ -175,5 +172,6 @@ module YfinanceWrapper
         hash[key] = candle[key].to_f
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
   end
 end

@@ -41,13 +41,6 @@ RSpec.describe YfinanceWrapper::Ticker do
     end
   end
 
-  describe "#basic_info" do
-    it "returns stock basic info" do
-      basic_info = ticker.basic_info
-      expect(basic_info).to be_a(Hash)
-    end
-  end
-
   describe "#calendar" do
     it "returns stock calendar" do
       calendar = ticker.calendar
