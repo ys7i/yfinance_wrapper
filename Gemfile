@@ -12,3 +12,5 @@ gem "rubocop", "~> 1.21"
 gem "pandas", "~> 0.3.8"
 
 gem "numpy", "~> 0.4.0"
+
+gem "rspec_junit_formatter", "~> 0.6.0", :groups => [:development, :test]

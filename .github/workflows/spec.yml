@@ -44,7 +44,7 @@ jobs:
         run: |
           bundle exec rspec
           # カバレッジレポートの生成
-          bundle exec rspec --format progress --format RspecJunitFormatter --out test-results/rspec/results.xml
+          bundle exec rspec --format progress
 
       - name: Upload test results
         if: always()

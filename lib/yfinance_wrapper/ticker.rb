@@ -35,13 +35,6 @@ module YfinanceWrapper
       result.map(&:to_h)
     end
 
-    def basic_info
-      result = @ticker.basic_info
-      result.keys.each_with_object({}) do |key, hash|
-        hash[key] = to_ruby_type(result[key])
-      end
-    end
-
     def calendar
       result = @ticker.calendar
       result.each_with_object({}) do |pair, hash|
