@@ -9,3 +9,24 @@ Style/StringLiteralsInInterpolation:
 
 Style/Documentation:
   Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Lint/MissingCopEnableDirective:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false

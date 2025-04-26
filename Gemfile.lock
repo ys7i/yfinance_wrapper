@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    yfinance_wrapper (0.2.0)
+    yfinance_wrapper (0.2.1)
       pycall (~> 1.5.2)
 
 GEM
