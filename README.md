@@ -24,3 +24,20 @@ This library supports the development of financial data applications and analysi
 ```bash
 pip3 install yfinance
 ```
+
+# Example
+
+```ruby
+ticker = YfinanceWrapper::Ticker.new('APPL')
+ticker.info
+# {"quoteType"=>"MUTUALFUND",
+#  "symbol"=>"APPL",
+#  "language"=>"en-US"
+# ...
+# }
+
+ticker.history(period: "max", interval: "1d")
+# {1980-12-12 00:00:00 -0500=>
+# ...
+# }
+```
